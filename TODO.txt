@@ -1,0 +1,20 @@
+************************************************************************************************************************************************************************
+
+***
+https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+***
+
+************************************************************************************************************************************************************************
+AUTHENTICATIONTYPES:
+
+- Token Authentication https://developer.okta.com/blog/2018/06/20/what-happens-if-your-jwt-is-stolen
+
+JWT Json Web Tokens.
+
+Do not put any sensitive Information in the Claims. For JWT they are easy to read
+
+- Cookie Authentication
+
+https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-5.0
+
+************************************************************************************************************************************************************************

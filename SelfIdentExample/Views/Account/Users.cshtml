@@ -1,0 +1,52 @@
+﻿@model List<SelfIdent.User>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">ID</th>
+			<th scope="col">Name</th>
+			<th scope="col">Email</th>
+			<th scope="col">RegistrationTime</th>
+			<th scope="col">LastLogin</th>
+			<th scope="col">Locked</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		@foreach (SelfIdent.User user in Model)
+		{
+			<tr>
+				<th scope="row">@user.Id</th>
+				<td>@Html.ActionLink(user.Name, "EditUser", "Account", new {id = user.Id})</td>
+				<td>@user.Email</td>
+				<td>@user.RegistrationTime</td>
+				<td>@user.LastLogin</td>
+				<td>@user.Locked</td>
+				<td>@Html.ActionLink("Delete", "Delete", "Account", new {id = user.Id})</td>
+
+				<td>
+					@{
+						if (user.Locked)
+						{
+							@using (Html.BeginForm("Unlock", "Account", FormMethod.Post))
+							{
+								<input type="text" hidden="hidden" name="id" id="id" value="@user.Id" />
+								<input type="text" name="key" id="key" />
+
+								<input type="submit" value="Unlock" />
+							}
+						}
+						else
+						{
+						<td>@Html.ActionLink("Lock", "Lock", "Account", new {id = user.Id})</td>
+						}
+					}
+
+				</td>
+
+			</tr>
+		}
+
+	</tbody>
+</table>
