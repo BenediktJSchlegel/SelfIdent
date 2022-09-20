@@ -20,7 +20,7 @@ namespace SelfIdent.Token
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, SelfIdent instance) // SelfIdent must be injected
+        public async Task Invoke(HttpContext context, SelfIdent instance) 
         {
             if (String.IsNullOrEmpty(instance.Options.SecurityContextOptions.TokenSecretKey))
                 return;

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace SelfIdent.Token
 {
     [AttributeUsage(AttributeTargets.Method)]
-    internal class SelfIdentAllowAnonymousAttribute : Attribute
+    public class SelfIdentAllowAnonymousAttribute : Attribute
     {
+        // No logic required. Only serves to cancel out the SelfIdentTokenAuthorizeAttribute
     }
 }
