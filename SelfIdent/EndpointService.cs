@@ -362,6 +362,8 @@ internal class EndpointService : ISelfIdentEndpoints
 
                 result.Token = tokenResult.Token;
                 result.Status = AuthenticationResultStatus.OK;
+                result.User = authenticationResult.User;
+                result.Successful = true;
 
                 return result;
             }

@@ -30,7 +30,7 @@ namespace SelfIdent.Token
             if (AllowsAnonymous(context))
                 return;
 
-            if (context.HttpContext.Items.ContainsKey(UserKey) && context.HttpContext.Items[UserKey] is UserIdentity identity)
+            if (context.HttpContext.Items.ContainsKey(UserKey) && context.HttpContext.Items[UserKey] is User identity)
             {
                 // User exists. Validate roles if any are specified
                 if (Roles != null)
@@ -46,7 +46,7 @@ namespace SelfIdent.Token
             }
         }
 
-        private bool RolesAreValid(UserIdentity identity, IEnumerable<string> roles)
+        private bool RolesAreValid(User identity, IEnumerable<string> roles)
         {
             foreach (string role in roles)
             {

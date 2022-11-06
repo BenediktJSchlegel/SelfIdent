@@ -25,26 +25,22 @@ namespace SelfIdent.Token
             if (String.IsNullOrEmpty(instance.Options.SecurityContextOptions.TokenSecretKey))
                 return;
 
-
             string headerValue = GetAuthorizationHeaderValue(context);
 
-            if (String.IsNullOrEmpty(headerValue))
-                return;
+            if (!String.IsNullOrEmpty(headerValue))
+            {
+                JwtSecurityToken? token = GetToken(headerValue, instance.Options.SecurityContextOptions.TokenSecretKey);
 
+                if (token != null)
+                {
+                    User? user = instance.GetUser(GetIdClaimValue(token));
 
-            JwtSecurityToken? token = GetToken(headerValue, instance.Options.SecurityContextOptions.TokenSecretKey);
-
-            if (token == null)
-                return;
-
-
-            User? user = instance.GetUser(GetIdClaimValue(token));
-
-            if (user == null || user.Locked)
-                return;
-
-
-            context.Items["User"] = user;
+                    if (user != null && !user.Locked)
+                    {
+                        context.Items["User"] = user;
+                    }
+                }
+            }
 
             await _next(context);
         }
@@ -52,7 +48,7 @@ namespace SelfIdent.Token
 
         private UInt64 GetIdClaimValue(JwtSecurityToken token)
         {
-            return UInt64.Parse(token.Claims.First(x => x.Type == "Id").Value);
+            return UInt64.Parse(token.Claims.First(x => x.Type.ToUpper() == "ID").Value);
         }
 
         private string GetAuthorizationHeaderValue(HttpContext context)
