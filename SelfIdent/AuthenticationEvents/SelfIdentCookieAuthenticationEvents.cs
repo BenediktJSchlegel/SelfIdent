@@ -61,7 +61,7 @@ public class SelfIdentCookieAuthenticationEvents : CookieAuthenticationEvents
 
     private ClaimsPrincipal GenerateNewPrincipal(UserIdentity identity)
     {
-        var primaryIdentity = new ClaimsIdentity(Helper.GetClaims(identity.ToPublicUser()), _selfIdent.Options.SecurityContextOptions.AuthenticationSchema);
+        var primaryIdentity = new ClaimsIdentity(identity.ToPublicUser().ToClaims(), _selfIdent.Options.SecurityContextOptions.AuthenticationSchema);
         var claimsPrincipal = new ClaimsPrincipal(primaryIdentity);
 
         return claimsPrincipal;

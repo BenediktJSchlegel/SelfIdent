@@ -35,7 +35,7 @@ internal class SecurityContextHandler : ISecurityContextHandler
             if (payload.User == null)
                 throw new ArgumentException("No User given to Authenticate");
 
-            var primaryIdentity = new ClaimsIdentity(Helper.GetClaims(payload.User), _options.AuthenticationSchema);
+            var primaryIdentity = new ClaimsIdentity(payload.User.ToClaims(), _options.AuthenticationSchema);
             var claimsPrincipal = new ClaimsPrincipal(primaryIdentity);
 
             var authProperties = new AuthenticationProperties
@@ -70,7 +70,7 @@ internal class SecurityContextHandler : ISecurityContextHandler
             if (payload.User == null)
                 throw new ArgumentException("No User given for Authentication.");
 
-            var primaryIdentity = new ClaimsIdentity(Helper.GetClaims(payload.User), _options.AuthenticationSchema);
+            var primaryIdentity = new ClaimsIdentity(payload.User.ToClaims(), _options.AuthenticationSchema);
             var claimsPrincipal = new ClaimsPrincipal(primaryIdentity);
 
             var authProperties = new AuthenticationProperties
@@ -112,7 +112,7 @@ internal class SecurityContextHandler : ISecurityContextHandler
             var symmetricKey = new SymmetricSecurityKey(keyBytes);
 
             var token = new JwtSecurityToken(
-                            claims: Helper.GetClaims(payload.User),
+                            claims: payload.User.ToClaims(),
                             notBefore: DateTime.UtcNow,
                             expires: expiresAt,
                             signingCredentials: new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature)

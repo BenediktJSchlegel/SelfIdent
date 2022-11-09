@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using SelfIdent.Constants;
 using SelfIdent.Identity;
 
 namespace SelfIdent;
@@ -60,5 +62,24 @@ public class User
         this.LastLogin = identity.AccountData.LastLogin ?? DateTime.MinValue;
         this.Roles = identity.Roles;
         this.LockKey = identity.AccountData.LockKey;
+    }
+
+    public List<Claim> ToClaims()
+    {
+        var claims = new List<Claim>();
+
+        claims.Add(new Claim(ClaimTypes.Name, this.Name));
+        claims.Add(new Claim(ClaimTypes.Email, this.Email));
+        claims.Add(new Claim(MainConstants.CLAIM_ID, this.Id.ToString()));
+        claims.Add(new Claim(MainConstants.CLAIM_REGISTRATIONTIME, this.RegistrationTime.ToString(MainConstants.DEFAULT_STRINGDATEFORMAT)));
+        claims.Add(new Claim(MainConstants.CLAIM_LASTLOGIN, this.LastLogin.ToString(MainConstants.DEFAULT_STRINGDATEFORMAT)));
+
+        if (this.Roles != null)
+        {
+            foreach (Roles.Role role in this.Roles)
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
+
+        return claims;
     }
 }

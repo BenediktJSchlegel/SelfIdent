@@ -75,24 +75,4 @@ internal static class Helper
 
         return (T)obj;
     }
-
-
-    public static List<Claim> GetClaims(User user)
-    {
-        var claims = new List<Claim>();
-
-        claims.Add(new Claim(ClaimTypes.Name, user.Name));
-        claims.Add(new Claim(ClaimTypes.Email, user.Email));
-        claims.Add(new Claim(MainConstants.CLAIM_ID, user.Id.ToString()));
-        claims.Add(new Claim(MainConstants.CLAIM_REGISTRATIONTIME, user.RegistrationTime.ToString(MainConstants.DEFAULT_STRINGDATEFORMAT)));
-        claims.Add(new Claim(MainConstants.CLAIM_LASTLOGIN, user.LastLogin.ToString(MainConstants.DEFAULT_STRINGDATEFORMAT)));
-
-        if (user.Roles != null)
-        {
-            foreach (Roles.Role role in user.Roles)
-                claims.Add(new Claim(ClaimTypes.Role, role.Name));
-        }
-
-        return claims;
-    }
 }
