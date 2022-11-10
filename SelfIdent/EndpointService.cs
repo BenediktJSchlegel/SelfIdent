@@ -332,6 +332,34 @@ internal class EndpointService : ISelfIdentEndpoints
         _securityContextHandler.LogoutCookie(context);
     }
 
+    public TokenUserValidationResult ValidateToken(TokenValidationPayload payload)
+    {
+        var result = new TokenUserValidationResult(payload.AuthenticationToken);
+
+        try
+        {
+            TokenValidationResult validationResult = _securityContextHandler.ValidateToken(payload);
+
+            if (!validationResult.Successful)
+                throw validationResult.ThrownException ?? new Exception("Failed validating token");
+
+            User user = GetUser(validationResult.UserId);
+
+            result.User = user;
+            result.Successful = true;
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            result.Successful = false;
+            result.ThrownException = e;
+            result.User = null;
+
+            return result;
+        }
+    }
+
     public TokenAuthenticationResult TokenAuthenticate(AuthenticationPayload payload)
     {
         var result = new TokenAuthenticationResult();

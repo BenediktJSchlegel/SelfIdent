@@ -245,4 +245,9 @@ public sealed class SelfIdent : ISelfIdentEndpoints
     {
         return GenerateEndpointService().InvalidateSecurityContext(payload);
     }
+
+    public TokenUserValidationResult ValidateToken(TokenValidationPayload payload)
+    {
+        return GenerateEndpointService().ValidateToken(payload);
+    }
 }

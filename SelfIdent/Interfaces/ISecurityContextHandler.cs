@@ -15,4 +15,5 @@ internal interface ISecurityContextHandler
     TokenContextResult AuthenticateToken(TokenContextPayload payload);
     void LogoutCookie(HttpContext context);
     Task LogoutCookieAsync(CookieContextPayload payload);
+    TokenValidationResult ValidateToken(TokenValidationPayload payload);
 }

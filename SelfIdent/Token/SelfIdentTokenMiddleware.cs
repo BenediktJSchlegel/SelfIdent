@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
+using SelfIdent.Helpers;
 
 namespace SelfIdent.Token
 {
@@ -29,7 +30,7 @@ namespace SelfIdent.Token
 
             if (!String.IsNullOrEmpty(headerValue))
             {
-                JwtSecurityToken? token = GetToken(headerValue, instance.Options.SecurityContextOptions.TokenSecretKey);
+                JwtSecurityToken? token = TokenHelper.GetToken(headerValue, instance.Options.SecurityContextOptions.TokenSecretKey);
 
                 if (token != null)
                 {
@@ -57,31 +58,6 @@ namespace SelfIdent.Token
                 return context.Request.Headers["Authorization"].First().Split(" ").Last();
 
             return String.Empty;
-        }
-
-        private JwtSecurityToken? GetToken(string headerValue, string secret)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.ASCII.GetBytes(secret);
-
-            try
-            {
-                tokenHandler.ValidateToken(headerValue, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                return (JwtSecurityToken)validatedToken; ;
-            }
-            catch
-            {
-                // return null if validation fails
-                return null;
-            }
         }
     }
 }

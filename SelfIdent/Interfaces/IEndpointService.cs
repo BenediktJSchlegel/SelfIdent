@@ -39,6 +39,8 @@ public interface ISelfIdentEndpoints
 
     TokenAuthenticationResult TokenAuthenticate(AuthenticationPayload payload);
 
+    TokenUserValidationResult ValidateToken(TokenValidationPayload payload);
+
     #endregion
 
     #region Not-Implemented

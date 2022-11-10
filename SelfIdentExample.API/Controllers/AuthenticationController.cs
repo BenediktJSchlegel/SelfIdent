@@ -16,6 +16,15 @@ namespace SelfIdentExample.API.Controllers
             this._selfIdent = ident;
         }
 
+        [HttpPost]
+        [Route("validateToken")]
+        public HttpResponseMessage ValidateToken([FromBody] string token)
+        {
+            SelfIdent.Account.SecurityContext.TokenUserValidationResult result = _selfIdent.ValidateToken(new SelfIdent.Account.SecurityContext.TokenValidationPayload(token));
+
+            return new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+        }
+
         [HttpGet]
         [Route("validate")]
         [SelfIdentTokenAuthorizeAttribute]

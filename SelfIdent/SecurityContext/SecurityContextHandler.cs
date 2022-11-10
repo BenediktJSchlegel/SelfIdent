@@ -60,6 +60,43 @@ internal class SecurityContextHandler : ISecurityContextHandler
         }
     }
 
+    public Account.SecurityContext.TokenValidationResult ValidateToken(TokenValidationPayload payload)
+    {
+        var result = new Account.SecurityContext.TokenValidationResult(payload.AuthenticationToken);
+
+        try
+        {
+            if (String.IsNullOrEmpty(_options.TokenSecretKey))
+                throw new Exception("No secret defined");
+
+            if (String.IsNullOrEmpty(payload.AuthenticationToken))
+                throw new Exception("No token given");
+
+            JwtSecurityToken? token = TokenHelper.GetToken(payload.AuthenticationToken, _options.TokenSecretKey);
+
+            if (token == null)
+                throw new Exception("Token invalid");
+
+            result.UserId = GetIdClaimValue(token);
+            result.Successful = true;
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            result.Successful = false;
+            result.ThrownException = e;
+
+            return result;
+        }
+    }
+
+
+    private UInt64 GetIdClaimValue(JwtSecurityToken token)
+    {
+        return UInt64.Parse(token.Claims.First(x => x.Type.ToUpper() == "ID").Value);
+    }
+
     public CookieContextResult AuthenticateCookie(CookieContextPayload payload)
     {
         var result = new CookieContextResult();
@@ -149,5 +186,4 @@ internal class SecurityContextHandler : ISecurityContextHandler
     {
         return DateTime.UtcNow + duration;
     }
-
 }
